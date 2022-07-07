@@ -1,2 +1,5 @@
-# ahorcado
-Juego del Ahorcado en Javascript
+# Juego del ahorcado
+
+Javascript
+
+
