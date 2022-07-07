@@ -1,5 +1,5 @@
 # Juego del ahorcado
 
-Javascript
+HTML + CSS + JQuery + Javascript
 
 
