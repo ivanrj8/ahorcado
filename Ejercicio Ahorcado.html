@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <style type='text/css'>
+        body {
+            font-family: Georgia, "Times New Roman", Times, serif;
+        }
+
+        #div {
+            width: 600px;
+            height: 500px;
+            margin-left: 20px;
+            border: 2px black solid;
+            padding: 20px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            background-color: 99ccff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 20pt;
+        }
+
+        table {
+            background-color: #EFF2FB;
+            text-align: center;
+            border: 1px solid #D0A9F5;
+            font-family: 'Cherry Swash', cursive;
+        }
+
+        td {
+            border: 1px solid #D0A9F5;
+            width: 30px;
+        }
+    </style>
+    <script src="..\jquery-3.6.0.min.js"> </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            arrayPalabra = new Array();
+            adivinado = 0;
+
+            $("#oculta").keydown(function (evento) {
+
+                switch (evento.key) {
+                    case "Enter":
+                        $("#oculta").attr("disabled", true);
+                        $("#oculto").css("display", "block");
+                        console.log(arrayPalabra);
+                        break;
+
+                    case "Backspace":
+                        arrayPalabra.pop();
+                        $("td").last().remove();
+                        break;
+
+                    case " ":
+                        arrayPalabra.push(evento.key);
+                        $("tr").append("<td> </td>");
+                        break;
+
+                    default:
+                        arrayPalabra.push(evento.key.toUpperCase());
+                        adivinado++;
+                        $("tr").append("<td>*</td>");
+                        break;
+                }
+            });
+
+            fallos = 0;
+
+            $("#texto").keydown(function (evento) {
+
+                if (evento.key == "Enter") {
+
+                    letra = $("#texto").val().toUpperCase();
+
+                    if (letra.length != 1 || letra == " ") {
+                        $("#aviso").text("Inserta una letra");
+                        $("#aviso").val() = "";
+                    } else {
+                        $("#aviso").text("");
+
+                        if (arrayPalabra.indexOf(letra) != -1) {
+
+                            for (var indice in arrayPalabra) {
+                                if (arrayPalabra[indice] === letra) {
+                                    arrayPalabra[indice] = "adivinado";
+                                    adivinado--;
+                                    $("td:eq(" + indice + ")").text(letra);
+                                }
+                            }
+                            if (adivinado == 0) {
+                                $("#aviso").text("¡¡HAS GANADO!!");
+                                $("#texto").attr("disabled", true);
+                            }
+                        } else {
+                            console.log(fallos);
+                            fallos++;
+                            $("#fallos").val(fallos.toString());
+                            if (fallos == 5) {
+                                fallos = 0;
+                                $("#aviso").text("HAS PERDIDO");
+                                $("#texto").attr("disabled", true);
+                            }
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="div">
+        <br><br>
+        ESCRIBE LA PALABRA A ADIVINAR: <input type="password" id="oculta" size=30>
+        <br><br>
+        <table>
+            <tr></tr>
+        </table>
+        <div id="oculto" style="display:none">
+            <br><br>
+            TECLEA LETRAS <input type="text" id="texto" size=3 minlength="1" maxlength="1">
+            <br><br>
+            FALLOS <input type="text" id="fallos" size=3 value=0 disabled>
+            <br><br>
+            <div id="aviso"></div>
+        </div>
+    </div>
+</body>
+
+</html>
